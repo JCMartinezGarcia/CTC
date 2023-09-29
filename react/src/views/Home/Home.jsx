@@ -1,6 +1,7 @@
 import React from "react";
 import NavbarComponent from "../../components/Navbar/NavbarComponent";
 import CardData from "../../components/CardData/CardData";
+import TaskTable from "../../components/TaskTable/TaskTable";
 import './Home.css';
 
 const Home = () => {
@@ -13,7 +14,7 @@ const Home = () => {
                     <CardData icon="tasks" quantity="4" />
                     <CardData icon="likes" quantity="4" />
                 </div>
-                <h1>Home View</h1>
+                <TaskTable />
             </div>
         </>
     )
