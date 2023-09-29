@@ -23,7 +23,7 @@ const CardData = ({ icon, quantity }) => {
     }
     return (
         <>
-            <div>
+            <div className="card-container">
                 <Card>
                     <CardBody>
                         <div className="inline-flex">
