@@ -1,0 +1,12 @@
+.task-table-title {
+    font-weight: 400;
+    color: #706f6f;
+    font-size: 1.75rem;
+}
+
+.underline-title {
+    position: absolute;
+    background-color: #b38e5d;
+    width: 35px;
+    height: 5px;
+}

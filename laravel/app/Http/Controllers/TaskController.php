@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -12,7 +13,11 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::all();
+
+        $tasks = DB::table('tasks')
+            ->join('republic_states', 'tasks.state_id', '=', 'republic_states.state_id')
+            ->select('tasks.*', 'republic_states.state_name')
+            ->get();
         return response()->json($tasks);
     }
 
@@ -55,8 +60,8 @@ class TaskController extends Controller
      */
     public function update(Request $request, string $id)
     {
-         // Validate the request...
-         $validated = $request->validate([
+        // Validate the request...
+        $validated = $request->validate([
             'title' => 'required|max:50',
             'description' => 'required',
             'state_id' => 'required|numeric',
