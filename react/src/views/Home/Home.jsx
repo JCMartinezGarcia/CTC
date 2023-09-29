@@ -8,7 +8,7 @@ const Home = () => {
         <>
             <div>
                 <NavbarComponent />
-                <div className="grid grid-flow-col auto-cols-auto gap-4 m-5 p-5">
+                <div className="cards-container grid grid-flow-col auto-cols-auto gap-4 m-5 p-5">
                     <CardData icon="users" quantity="4" />
                     <CardData icon="tasks" quantity="4" />
                     <CardData icon="likes" quantity="4" />
