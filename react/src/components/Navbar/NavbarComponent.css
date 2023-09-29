@@ -1,0 +1,11 @@
+.bg-background\/70 {
+    background-color: rgb(11, 35, 30) !important;
+}
+
+.max-w-\[1024px\] {
+    max-width: none !important;
+}
+
+nav a {
+    color: white !important;
+}
