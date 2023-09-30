@@ -7,10 +7,11 @@ import {
     TableBody,
     TableRow,
     TableCell,
+    Pagination,
     getKeyValue
 } from "@nextui-org/react";
-import { Button } from "@nextui-org/react";
-import { FaTrash } from "react-icons/fa";
+import { Button, Input, Select, SelectItem } from "@nextui-org/react";
+import { FaTrash, FaSearch } from "react-icons/fa";
 import { GrLike } from "react-icons/gr";
 import { toast, ToastContainer } from 'react-toastify';
 import axios from "axios";
@@ -19,8 +20,22 @@ import './TaskTable.css';
 
 
 const TaskTable = () => {
+
     const navigate = useNavigate();
+    const [states, setStates] = useState([]);
     const [rows, setRows] = useState([]);
+    const [page, setPage] = React.useState(1);
+    const rowsPerPage = 4;
+
+    const pages = Math.ceil(rows.length / rowsPerPage);
+
+    const items = React.useMemo(() => {
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+
+        return rows.slice(start, end);
+    }, [page, rows]);
+
     const actions = [
         'like',
         'delete'
@@ -58,12 +73,21 @@ const TaskTable = () => {
 
     useEffect(() => {
         getTasks();
+        getStates();
     }, []);
 
     const getTasks = async () => {
         try {
             const response = await axios.get("/api/task");
             setRows(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const getStates = async () => {
+        try {
+            const response = await axios.get("api/republicstates");
+            setStates(response.data);
         } catch (error) {
             console.log(error);
         }
@@ -106,6 +130,33 @@ const TaskTable = () => {
         } catch (error) {
             console.log(error);
         }
+    }
+    const handleSearchTask = async (e) => {
+        const { value } = e.target;
+        if (value === '') {
+            getTasks();
+            return
+        }
+        try {
+            const response = await axios.get(`/api/taskbyname/${value}`);
+            if (response.status === 200) {
+                setRows(response.data);
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const handleStateFilter = async (e) => {
+        const { value } = e.target;
+        try {
+            const response = await axios.get(`/api/taskbystate/${value}`);
+            if (response.status === 200) {
+                setRows(response.data);
+            }
+        } catch (error) {
+            console.log(error)
+        }
+
     }
     const getActionFunction = (action, id, likes) => {
         switch (action) {
@@ -155,16 +206,68 @@ const TaskTable = () => {
                 <h1 className="task-table-title m-1">Lista de Tareas Comunitarias</h1>
                 <span className="underline-title m-1"></span>
                 <div className="mt-10">
-                    <div className="table-actions">
-                        <Button className="bg-amber-800 mb-3" size="sm" onClick={handleCreateTask}>
+                    <div className="table-actions inline-flex w-full">
+                        <Button
+                            className="create-task-button mb-4 col-span-1"
+                            size="sm"
+                            onClick={handleCreateTask}>
                             Agregar Tarea
                         </Button>
+                        <div className="grid grid-cols-2 gap-4 ml-auto">
+                            <Input
+                                size="sm"
+                                label="Search"
+                                isClearable
+                                radius="sm"
+                                classNames={{
+                                    label: "text-black/50 dark:text-white/90",
+                                }}
+                                placeholder="Type to search..."
+                                startContent={
+                                    <FaSearch />
+                                }
+                                onChange={handleSearchTask}
+                            />
+                            <Select
+                                size="sm"
+                                label="Estado de la república"
+                                placeholder="Selecciona estado"
+                                className=""
+                                onChange={handleStateFilter}
+                            >
+
+                                {states.map((state) => (
+                                    <SelectItem key={state.state_id} value={state.state_id}>
+                                        {state.state_name}
+                                    </SelectItem>
+                                ))}
+
+                            </Select>
+                        </div>
                     </div>
-                    <Table aria-label="Example table with dynamic content">
+                    <Table
+                        aria-label="Example table with dynamic content"
+                        bottomContent={
+                            <div className="flex w-full justify-center">
+                                <Pagination
+                                    isCompact
+                                    showControls
+                                    showShadow
+                                    color="secondary"
+                                    page={page}
+                                    total={pages}
+                                    onChange={(page) => setPage(page)}
+                                />
+                            </div>
+                        }
+                        classNames={{
+                            wrapper: "min-h-[222px]",
+                        }}
+                    >
                         <TableHeader columns={columns}>
                             {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
                         </TableHeader>
-                        <TableBody items={rows}>
+                        <TableBody items={items}>
                             {(item) => (
                                 <TableRow key={item.task_id}>
                                     {(columnKey) => <TableCell className={(columnKey === "actions") ? "inline-flex" : ''}>{(columnKey === "actions") ? getActionButtons(item.task_id, item.likes) : getKeyValue(item, columnKey)}</TableCell>}
