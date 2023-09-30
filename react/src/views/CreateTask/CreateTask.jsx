@@ -24,7 +24,6 @@ const CreateTask = () => {
     const getStates = async () => {
         try {
             const response = await axios.get("api/republicstates");
-            console.log(response);
             setStates(response.data);
         } catch (error) {
 
@@ -35,7 +34,6 @@ const CreateTask = () => {
         try {
             const response = await axios.post('/api/task', data);
             const taskTitleMessage = response.data.title;
-            console.log(response);
             if (response.status === 200) {
                 toast.success(`Tarea: ${taskTitleMessage} creada con exito.`);
                 setTimeout(() => {

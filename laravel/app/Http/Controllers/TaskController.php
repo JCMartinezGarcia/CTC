@@ -17,6 +17,7 @@ class TaskController extends Controller
         $tasks = DB::table('tasks')
             ->join('republic_states', 'tasks.state_id', '=', 'republic_states.state_id')
             ->select('tasks.*', 'republic_states.state_name')
+            ->where('tasks.deleted_at', "=", null)
             ->get();
         return response()->json($tasks);
     }
@@ -62,18 +63,10 @@ class TaskController extends Controller
     {
         // Validate the request...
         $validated = $request->validate([
-            'title' => 'required|max:50',
-            'description' => 'required',
-            'state_id' => 'required|numeric',
-            'task_creator' => 'required|string|max:50',
             'likes' => 'nullable|numeric',
         ]);
 
         $task = Task::find($id);
-        $task->title = $request->title;
-        $task->description = $request->description;
-        $task->state_id = $request->state_id;
-        $task->task_creator = $request->task_creator;
         $task->likes = $request->likes;
         $task->save();
         return response()->json($task);

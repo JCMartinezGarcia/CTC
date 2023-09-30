@@ -33,3 +33,9 @@ form {
     background: dimgray;
     cursor: pointer;
 }
+
+*:disabled {
+    background-color: dimgrey !important;
+    color: linen;
+    opacity: 1;
+}

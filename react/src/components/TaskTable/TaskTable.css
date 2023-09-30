@@ -10,7 +10,12 @@
     width: 35px;
     height: 5px;
 }
-.table-actions button{
+
+.table-actions button {
     background: #b38e5d;
     color: #fff;
+}
+
+.action-buttons {
+    background-color: #b38e5d !important;
 }
