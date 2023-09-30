@@ -1,0 +1,35 @@
+form {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background-color: #0b231e61;
+}
+
+.form-container {
+    width: 50%;
+    margin: auto;
+}
+
+.task-create-title {
+    font-weight: 400;
+    color: #706f6f;
+    font-size: 1.75rem;
+}
+
+.underline-title {
+    position: absolute;
+    background-color: #b38e5d;
+    width: 35px;
+    height: 5px;
+}
+
+.submit-button-container {
+    text-align: end;
+}
+
+.submit-button-container input {
+    padding: 6px;
+    width: 8rem;
+    background: dimgray;
+    cursor: pointer;
+}

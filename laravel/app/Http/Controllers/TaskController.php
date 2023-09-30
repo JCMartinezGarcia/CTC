@@ -40,7 +40,7 @@ class TaskController extends Controller
         $task->description = $request->description;
         $task->state_id = $request->state_id;
         $task->task_creator = $request->task_creator;
-        $task->likes = $request->likes;
+        $task->likes = 0;
         $task->save();
         return response()->json($task);
     }
