@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
     Table,
     TableHeader,
@@ -8,11 +9,13 @@ import {
     TableCell,
     getKeyValue
 } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import axios from "axios";
 import './TaskTable.css';
 
 
 const TaskTable = () => {
+    const navigate = useNavigate();
     const [rows, setRows] = useState([]);
     const columns = [
         {
@@ -40,9 +43,11 @@ const TaskTable = () => {
             label: "LIKES",
         },
     ];
+
     useEffect(() => {
         getTasks();
     }, []);
+
     const getTasks = async () => {
         try {
             const response = await axios.get("/api/task");
@@ -52,13 +57,20 @@ const TaskTable = () => {
             console.log(error);
         }
     }
-
+    const handleCreateTask = () => {
+        navigate('/task/create');
+    }
     return (
         <>
             <div className="m-5 p-5">
                 <h1 className="task-table-title m-1">Lista de Tareas Comunitarias</h1>
                 <span className="underline-title m-1"></span>
                 <div className="mt-10">
+                    <div className="table-actions">
+                        <Button className="bg-amber-800 mb-3" size="sm" onClick={handleCreateTask}>
+                            Agregar Tarea
+                        </Button>
+                    </div>
                     <Table aria-label="Example table with dynamic content">
                         <TableHeader columns={columns}>
                             {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
