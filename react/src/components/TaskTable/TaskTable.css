@@ -11,8 +11,8 @@
     height: 5px;
 }
 
-.table-actions button {
-    background: #b38e5d;
+.create-task-button {
+    background: #b38e5d !important;
     color: #fff;
 }
 
