@@ -23,6 +23,7 @@ const TaskTable = () => {
 
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = React.useState(true);
+    const [filter, setFilter] = React.useState(false);
     const [states, setStates] = useState([]);
     const [rows, setRows] = useState([]);
     const [page, setPage] = React.useState(1);
@@ -112,8 +113,12 @@ const TaskTable = () => {
             if (response.status === 200) {
                 const taskTitleMsg = response.data.title;
                 toast.success(`¡Gracias por tu like a la tarea: "${taskTitleMsg}" !`);
-                getTasks();
                 disableLikeButton(id);
+                if (!filter) {
+                    getTasks();
+                } else {
+                    document.getElementById(`td-like-${id}`).innerText = likesUpdateData;
+                }
             }
         } catch (error) {
             console.log(error.message);
@@ -142,6 +147,7 @@ const TaskTable = () => {
         const { value } = e.target;
         if (value === '') {
             getTasks();
+            setFilter(false);
             return
         }
         try {
@@ -149,6 +155,7 @@ const TaskTable = () => {
             if (response.status === 200) {
                 setRows(response.data);
                 setIsLoading(false);
+                setFilter(true);
             }
         } catch (error) {
             console.log(error.message)
@@ -163,6 +170,7 @@ const TaskTable = () => {
             if (response.status === 200) {
                 setRows(response.data);
                 setIsLoading(false);
+                setFilter(true);
             }
         } catch (error) {
             console.log(error.message)
@@ -286,7 +294,7 @@ const TaskTable = () => {
                         >
                             {(item) => (
                                 <TableRow key={item.task_id}>
-                                    {(columnKey) => <TableCell className={(columnKey === "actions") ? "inline-flex" : ''}>{(columnKey === "actions") ? getActionButtons(item.task_id, item.likes) : getKeyValue(item, columnKey)}</TableCell>}
+                                    {(columnKey) => <TableCell className={(columnKey === "actions") ? "inline-flex" : ''}>{(columnKey === "actions") ? getActionButtons(item.task_id, item.likes) : <span id={(columnKey === "likes") ? `td-like-${item.task_id}` : ''}>{getKeyValue(item, columnKey)}</span>}</TableCell>}
                                 </TableRow>
                             )}
                         </TableBody>

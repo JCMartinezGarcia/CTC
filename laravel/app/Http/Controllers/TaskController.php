@@ -29,8 +29,8 @@ class TaskController extends Controller
     {
         // Validate the request...
         $validated = $request->validate([
-            'title' => 'required|max:50',
-            'description' => 'required',
+            'title' => 'required|max:50|string',
+            'description' => 'required|string',
             'state_id' => 'required|numeric',
             'task_creator' => 'required|string|max:50',
             'likes' => 'nullable|numeric',
@@ -49,8 +49,12 @@ class TaskController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, string $id)
     {
+        // Validate the request...
+        $validated = $request->validate([
+            'id' => 'numeric',
+        ]);
         // Retrieve a model by its primary key...
         $task = Task::find($id);
         return response()->json($task);
@@ -75,8 +79,13 @@ class TaskController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
+        // Validate the request...
+        $validated = $request->validate([
+            'id' => 'numeric',
+        ]);
+
         $task = Task::find($id);
         $task->delete();
         return response()->json($task);

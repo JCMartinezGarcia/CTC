@@ -30,4 +30,3 @@ Route::apiResource('registereduser', RegisteredUserController::class);
 Route::apiResource('user', UserController::class);
 Route::apiResource('task', TaskController::class);
 Route::apiResource('republicstates', RepublicStatesController::class);
-#Route::apiResource('task', 'TaskController');
