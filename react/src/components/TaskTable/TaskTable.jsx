@@ -25,7 +25,7 @@ const TaskTable = () => {
     const [states, setStates] = useState([]);
     const [rows, setRows] = useState([]);
     const [page, setPage] = React.useState(1);
-    const rowsPerPage = 4;
+    const rowsPerPage = 5;
 
     const pages = Math.ceil(rows.length / rowsPerPage);
 
@@ -212,19 +212,19 @@ const TaskTable = () => {
                 <h1 className="task-table-title m-1">Lista de Tareas Comunitarias</h1>
                 <span className="underline-title m-1"></span>
                 <div className="mt-10">
-                    <div className="table-actions inline-flex w-full">
+                    <div className="table-actions inline-flex w-full mb-4">
                         <Button
-                            className="create-task-button mb-4 col-span-1"
+                            className="create-task-button col-span-1"
                             size="sm"
                             onClick={handleCreateTask}>
                             Agregar Tarea
                         </Button>
-                        <div className="grid grid-cols-2 gap-4 ml-auto">
+                        <div className="task-filters-container grid grid-cols-2 gap-4 ml-auto">
                             <Input
                                 size="sm"
                                 label="Search"
-                                isClearable
                                 radius="sm"
+                                className="task-search-input"
                                 classNames={{
                                     label: "text-black/50 dark:text-white/90",
                                 }}

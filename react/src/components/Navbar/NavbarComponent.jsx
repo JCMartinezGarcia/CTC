@@ -1,47 +1,31 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button } from "@nextui-org/react";
 import { Image } from "@nextui-org/react";
 import './NavbarComponent.css';
 
 const NavbarComponent = () => {
 
-    const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+    const navigate = useNavigate();
 
-    const menuItems = [
-        "Profile",
-        "Dashboard",
-        "Activity",
-        "Analytics",
-        "System",
-        "Deployments",
-        "My Settings",
-        "Team Settings",
-        "Help & Feedback",
-        "Log Out",
-    ];
+    const handleRedirect = (path) => {
+        navigate(path);
+    }
     return (
         <Navbar isBordered className="text-white">
             <NavbarBrand>
-                <Image
-                    width={150}
-                    alt="Gobierno de México"
-                    src="https://framework-gb.cdn.gob.mx/landing/img/logoheader.svg"
-                />
+                <Link color="foreground" href="/">
+                    <Image
+                        width={150}
+                        alt="Gobierno de México"
+                        src="https://framework-gb.cdn.gob.mx/landing/img/logoheader.svg"
+                    />
+                </Link>
             </NavbarBrand>
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
                 <NavbarItem>
-                    <Link color="foreground" href="#">
-                        Features
-                    </Link>
-                </NavbarItem>
-                <NavbarItem isActive>
-                    <Link href="#" aria-current="page">
-                        Customers
-                    </Link>
-                </NavbarItem>
-                <NavbarItem>
-                    <Link color="foreground" href="#">
-                        Integrations
+                    <Link color="foreground" href="/">
+                        Inicio
                     </Link>
                 </NavbarItem>
             </NavbarContent>
@@ -55,7 +39,7 @@ const NavbarComponent = () => {
                     </Button>
                 </NavbarItem>
             </NavbarContent>
-            
+
         </Navbar>
     )
 }
