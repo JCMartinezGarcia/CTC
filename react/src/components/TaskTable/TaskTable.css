@@ -1,3 +1,18 @@
+@media only screen and (max-width: 640px) {
+    .table-actions {
+        display: block !important;
+    }
+    .table-actions button{
+        margin-bottom: 1rem;
+    }
+    .task-filters-container{
+        display: block !important;
+    }
+    .task-search-input{
+        margin-bottom: 1rem;
+    }
+}
+
 .task-table-title {
     font-weight: 400;
     color: #706f6f;

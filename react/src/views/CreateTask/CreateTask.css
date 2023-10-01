@@ -1,3 +1,13 @@
+@media only screen and (max-width: 375px) {
+    .submit-button-container input {
+        width: -moz-available !important;
+        padding: 6px;
+        width: 8rem;
+        background: dimgray;
+        cursor: pointer;
+    }
+}
+
 form {
     margin-top: 2rem;
     margin-bottom: 2rem;
@@ -25,6 +35,7 @@ form {
 
 .submit-button-container {
     text-align: end;
+    margin: 1rem;
 }
 
 .submit-button-container input {
