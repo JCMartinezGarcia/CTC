@@ -35,7 +35,7 @@ class TaskFiltersController extends Controller
         $validated = $request->validate([
             'state_id' => 'numeric',
         ]);
-        
+
         $tasks = DB::table('tasks')
             ->join('republic_states', 'tasks.state_id', '=', 'republic_states.state_id')
             ->select('tasks.*', 'republic_states.state_name')
