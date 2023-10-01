@@ -26,7 +26,8 @@ const CreateTask = () => {
             const response = await axios.get("api/republicstates");
             setStates(response.data);
         } catch (error) {
-
+            console.log(error.message)
+            toast.error(`Ocurrio un error en el servidor`);
         }
     }
 
@@ -41,7 +42,8 @@ const CreateTask = () => {
                 }, 1 * 5000);
             }
         } catch (error) {
-            console.log(error);
+            console.log(error.message)
+            toast.error(`Ocurrio un error en el servidor`);
         }
     }
     const validateSelectedDate = () => {
