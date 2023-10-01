@@ -10,7 +10,7 @@ import {
     Pagination,
     getKeyValue
 } from "@nextui-org/react";
-import { Button, Input, Select, SelectItem } from "@nextui-org/react";
+import { Button, Input, Select, SelectItem, Spinner } from "@nextui-org/react";
 import { FaTrash, FaSearch } from "react-icons/fa";
 import { GrLike } from "react-icons/gr";
 import { toast, ToastContainer } from 'react-toastify';
@@ -22,6 +22,7 @@ import './TaskTable.css';
 const TaskTable = () => {
 
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = React.useState(true);
     const [states, setStates] = useState([]);
     const [rows, setRows] = useState([]);
     const [page, setPage] = React.useState(1);
@@ -80,6 +81,7 @@ const TaskTable = () => {
         try {
             const response = await axios.get("/api/task");
             setRows(response.data);
+            setIsLoading(false);
         } catch (error) {
             console.log(error.message);
             toast.error(`Ocurrio un error en el servidor`);
@@ -136,6 +138,7 @@ const TaskTable = () => {
         }
     }
     const handleSearchTask = async (e) => {
+        setIsLoading(true);
         const { value } = e.target;
         if (value === '') {
             getTasks();
@@ -145,6 +148,7 @@ const TaskTable = () => {
             const response = await axios.get(`/api/taskbyname/${value}`);
             if (response.status === 200) {
                 setRows(response.data);
+                setIsLoading(false);
             }
         } catch (error) {
             console.log(error.message)
@@ -152,11 +156,13 @@ const TaskTable = () => {
         }
     }
     const handleStateFilter = async (e) => {
+        setIsLoading(true);
         const { value } = e.target;
         try {
             const response = await axios.get(`/api/taskbystate/${value}`);
             if (response.status === 200) {
                 setRows(response.data);
+                setIsLoading(false);
             }
         } catch (error) {
             console.log(error.message)
@@ -273,7 +279,11 @@ const TaskTable = () => {
                         <TableHeader columns={columns}>
                             {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
                         </TableHeader>
-                        <TableBody items={items}>
+                        <TableBody
+                            items={items}
+                            isLoading={isLoading}
+                            loadingContent={<Spinner label="Loading..." />}
+                        >
                             {(item) => (
                                 <TableRow key={item.task_id}>
                                     {(columnKey) => <TableCell className={(columnKey === "actions") ? "inline-flex" : ''}>{(columnKey === "actions") ? getActionButtons(item.task_id, item.likes) : getKeyValue(item, columnKey)}</TableCell>}
