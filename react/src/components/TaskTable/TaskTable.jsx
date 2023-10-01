@@ -81,7 +81,8 @@ const TaskTable = () => {
             const response = await axios.get("/api/task");
             setRows(response.data);
         } catch (error) {
-            console.log(error);
+            console.log(error.message);
+            toast.error(`Ocurrio un error en el servidor`);
         }
     }
     const getStates = async () => {
@@ -89,7 +90,8 @@ const TaskTable = () => {
             const response = await axios.get("api/republicstates");
             setStates(response.data);
         } catch (error) {
-            console.log(error);
+            console.log(error.message);
+            toast.error(`Ocurrio un error en el servidor`);
         }
     }
     const disableLikeButton = (id) => {
@@ -112,7 +114,8 @@ const TaskTable = () => {
                 disableLikeButton(id);
             }
         } catch (error) {
-            console.log(error);
+            console.log(error.message);
+            toast.error(`Ocurrio un error en el servidor`);
         }
     }
     const handleDeleteTask = async (id, likes) => {
@@ -128,7 +131,8 @@ const TaskTable = () => {
                 getTasks();
             }
         } catch (error) {
-            console.log(error);
+            console.log(error.message);
+            toast.error(`Ocurrio un error en el servidor`);
         }
     }
     const handleSearchTask = async (e) => {
@@ -143,7 +147,8 @@ const TaskTable = () => {
                 setRows(response.data);
             }
         } catch (error) {
-            console.log(error)
+            console.log(error.message)
+            toast.error(`Ocurrio un error en el servidor`);
         }
     }
     const handleStateFilter = async (e) => {
@@ -154,7 +159,8 @@ const TaskTable = () => {
                 setRows(response.data);
             }
         } catch (error) {
-            console.log(error)
+            console.log(error.message)
+            toast.error(`Ocurrio un error en el servidor`);
         }
 
     }
