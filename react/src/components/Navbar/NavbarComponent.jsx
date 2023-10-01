@@ -29,16 +29,6 @@ const NavbarComponent = () => {
                     </Link>
                 </NavbarItem>
             </NavbarContent>
-            <NavbarContent justify="end">
-                <NavbarItem className="hidden lg:flex">
-                    <Link href="#">Login</Link>
-                </NavbarItem>
-                <NavbarItem>
-                    <Button as={Link} color="" className="bg-yellow-900" href="#" variant="flat">
-                        Sign Up
-                    </Button>
-                </NavbarItem>
-            </NavbarContent>
 
         </Navbar>
     )
