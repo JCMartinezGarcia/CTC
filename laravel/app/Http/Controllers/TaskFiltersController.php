@@ -15,7 +15,7 @@ class TaskFiltersController extends Controller
     {
         // Validate the request...
         $validated = $request->validate([
-            'name' => 'numeric',
+            'name' => 'string',
         ]);
         $tasks = DB::table('tasks')
             ->join('republic_states', 'tasks.state_id', '=', 'republic_states.state_id')
@@ -44,4 +44,22 @@ class TaskFiltersController extends Controller
             ->get();
         return response()->json($tasks);
     }
+    public function findTaskByNameAndState(Request $request)
+    {
+        // Validate the request...
+        $validated = $request->validate([
+            'state_id' => 'numeric',
+            'name' => 'numeric',
+        ]);
+
+        $tasks = DB::table('tasks')
+            ->join('republic_states', 'tasks.state_id', '=', 'republic_states.state_id')
+            ->select('tasks.*', 'republic_states.state_name')
+            ->where('tasks.deleted_at', "=", null)
+            ->where('tasks.state_id', $request->state_id)
+            ->where('title', 'like', '' . $request->name . '%')
+            ->get();
+        return response()->json($tasks);
+    }
+    
 }
