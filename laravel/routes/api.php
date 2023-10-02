@@ -26,6 +26,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 Route::get('/taskbyname/{name}', [TaskFiltersController::class, 'findTaskByName']);
 Route::get('/taskbystate/{state_id}', [TaskFiltersController::class, 'findTaskByState']);
+Route::get('/taskbystate/{state_id}/{name}', [TaskFiltersController::class, 'findTaskByNameAndState']);
 Route::apiResource('registereduser', RegisteredUserController::class);
 Route::apiResource('user', UserController::class);
 Route::apiResource('task', TaskController::class);

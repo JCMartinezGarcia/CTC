@@ -22,13 +22,16 @@ import './TaskTable.css';
 const TaskTable = () => {
 
     const navigate = useNavigate();
+    const notResultsMessage = 'Lista sin resultados.';
+    const [notFound, setNotFound] = React.useState(false);
     const [isLoading, setIsLoading] = React.useState(true);
     const [filter, setFilter] = React.useState(false);
+    const [filterSearch, setFilterSearch] = React.useState('');
+    const [filterState, setFilterState] = React.useState(0);
     const [states, setStates] = useState([]);
     const [rows, setRows] = useState([]);
     const [page, setPage] = React.useState(1);
     const rowsPerPage = 5;
-
     const pages = Math.ceil(rows.length / rowsPerPage);
 
     const items = React.useMemo(() => {
@@ -145,14 +148,26 @@ const TaskTable = () => {
     const handleSearchTask = async (e) => {
         setIsLoading(true);
         const { value } = e.target;
-        if (value === '') {
+        setFilterSearch(value);
+        let response;
+        if (value === '' && filterState === 0 || value === '' && filterState === "") {
             getTasks();
             setFilter(false);
             return
         }
+       
         try {
-            const response = await axios.get(`/api/taskbyname/${value}`);
+            (filterState === 0 || filterState === "")
+                ? response = await axios.get(`/api/taskbyname/${value}`)
+                : response = await axios.get(`/api/taskbystate/${filterState}/${value}`);
             if (response.status === 200) {
+                if (!response.data.length) {
+                    toast.info('No se encontrarron resultados para tu busqueda.');
+                    setIsLoading(true);
+                    setNotFound(true);
+                    setRows(response.data);
+                    return
+                }
                 setRows(response.data);
                 setIsLoading(false);
                 setFilter(true);
@@ -165,9 +180,26 @@ const TaskTable = () => {
     const handleStateFilter = async (e) => {
         setIsLoading(true);
         const { value } = e.target;
+        setFilterState(value);
+        if (value === "" && filterSearch === "") {
+            getTasks();
+            setFilter(false);
+            return
+        }
+       
+        let response;
         try {
-            const response = await axios.get(`/api/taskbystate/${value}`);
+            if (filterSearch !== "" && value !== "") { console.log('in'); response = await axios.get(`/api/taskbystate/${value}/${filterSearch}`); }
+            if (value != 0 && filterSearch === "") { response = await axios.get(`/api/taskbystate/${value}`); }
+            if (value === "" && filterSearch != "") { response = await axios.get(`/api/taskbyname/${filterSearch}`); }
             if (response.status === 200) {
+                if (!response.data.length) {
+                    toast.info('No se encontrarron resultados para tu busqueda.');
+                    setIsLoading(true);
+                    setNotFound(true);
+                    setRows(response.data);
+                    return
+                }
                 setRows(response.data);
                 setIsLoading(false);
                 setFilter(true);
@@ -178,6 +210,7 @@ const TaskTable = () => {
         }
 
     }
+
     const getActionFunction = (action, id, likes) => {
         switch (action) {
             case "like":
@@ -207,7 +240,6 @@ const TaskTable = () => {
             >{getIcon(action)}</Button>
         });
     }
-
     return (
         <>
             <div className="m-5 p-5">
@@ -228,7 +260,7 @@ const TaskTable = () => {
                 <div className="mt-10">
                     <div className="table-actions inline-flex w-full mb-4">
                         <Button
-                            className="create-task-button col-span-1"
+                            className="create-task-button col-span-1 w-15 h-15"
                             size="sm"
                             onClick={handleCreateTask}>
                             Agregar Tarea
@@ -249,15 +281,17 @@ const TaskTable = () => {
                                 onChange={handleSearchTask}
                             />
                             <Select
+                                id="filter-states-select"
                                 size="sm"
                                 label="Estado de la república"
                                 placeholder="Selecciona estado"
-                                className=""
                                 onChange={handleStateFilter}
                             >
-
                                 {states.map((state) => (
-                                    <SelectItem key={state.state_id} value={state.state_id}>
+                                    <SelectItem
+                                        key={state.state_id}
+                                        value={state.state_id}
+                                    >
                                         {state.state_name}
                                     </SelectItem>
                                 ))}
@@ -290,7 +324,7 @@ const TaskTable = () => {
                         <TableBody
                             items={items}
                             isLoading={isLoading}
-                            loadingContent={<Spinner label="Loading..." />}
+                            loadingContent={(notFound) ? notResultsMessage : <Spinner label="Loading..." />}
                         >
                             {(item) => (
                                 <TableRow key={item.task_id}>
