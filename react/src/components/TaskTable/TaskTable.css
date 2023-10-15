@@ -2,13 +2,18 @@
     .table-actions {
         display: block !important;
     }
-    .table-actions button{
+
+    .table-actions button {
         margin-bottom: 1rem;
+        width: 100%;
+        padding: 1rem;
     }
-    .task-filters-container{
+
+    .task-filters-container {
         display: block !important;
     }
-    .task-search-input{
+
+    .task-search-input {
         margin-bottom: 1rem;
     }
 }

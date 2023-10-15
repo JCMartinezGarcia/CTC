@@ -15,7 +15,7 @@ const CreateTask = () => {
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
     const dateInput = watch("fecha");
     const dateObject = new Date();
-    const todayDate = dateObject.getFullYear() + "-0" + (dateObject.getMonth() + 1) + "-" + dateObject.getDate();
+    const todayDate = dateObject.getFullYear() + "-" + (dateObject.getMonth() + 1) + "-" + dateObject.getDate();
 
     useEffect(() => {
         getStates();
@@ -47,7 +47,7 @@ const CreateTask = () => {
         }
     }
     const validateSelectedDate = () => {
-        return todayDate === dateInput
+        return todayDate == dateInput // 2023-09-10 2023-09-10 
     }
     return (
         <>

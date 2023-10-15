@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import NavbarComponent from "../../components/Navbar/NavbarComponent";
 import CardData from "../../components/CardData/CardData";
 import TaskTable from "../../components/TaskTable/TaskTable";
 import './Home.css';
 
 const Home = () => {
+    let disabledLikes = [];
+    useEffect(() => {
+        disabledLikes = [];
+    }, []);
     return (
         <>
             <div>
@@ -14,7 +18,7 @@ const Home = () => {
                     <CardData icon="tasks" quantity="4" />
                     <CardData icon="likes" quantity="4" />
                 </div>
-                <TaskTable />
+                <TaskTable disables={disabledLikes} />
             </div>
         </>
     )

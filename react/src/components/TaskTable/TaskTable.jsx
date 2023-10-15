@@ -17,10 +17,11 @@ import { toast, ToastContainer } from 'react-toastify';
 import axios from "axios";
 import 'react-toastify/dist/ReactToastify.css';
 import './TaskTable.css';
+import { distance } from "framer-motion";
 
 
-const TaskTable = () => {
-
+const TaskTable = ({ disables }) => {
+    console.log(disables);
     const navigate = useNavigate();
     const notResultsMessage = 'Lista sin resultados.';
     const [notFound, setNotFound] = React.useState(false);
@@ -48,11 +49,11 @@ const TaskTable = () => {
     const columns = [
         {
             key: "title",
-            label: "TITULO",
+            label: "TÍTULO",
         },
         {
             key: "description",
-            label: "DESCRIPCION",
+            label: "DESCRIPCIÓN",
         },
         {
             key: "created_at",
@@ -100,15 +101,29 @@ const TaskTable = () => {
             toast.error(`Ocurrio un error en el servidor`);
         }
     }
-    const disableLikeButton = (id) => {
-        document.getElementById(`like-button-${id}`).disabled = true;
-    }
     const validateLikesDelete = (likes) => {
         return likes !== 0;
     }
+
+    function validateDisables(likeId) {
+        let res = false
+        disables.forEach(disable => {
+            if (disable === likeId) {
+                res = true;
+            }
+        });
+        return res;
+    }
+
+    const disableLikeButton = (id) => {
+        if (!validateDisables(id)) { disables.push(id); }
+        document.getElementById(`like-button-${id}`).disabled = true;
+    }
+
     const handleCreateTask = () => {
         navigate('/task/create');
     }
+
     const handleUpdateLike = async (id, likes) => {
         const likesUpdateData = likes + 1;
         try {
@@ -155,14 +170,14 @@ const TaskTable = () => {
             setFilter(false);
             return
         }
-       
+
         try {
             (filterState === 0 || filterState === "")
                 ? response = await axios.get(`/api/taskbyname/${value}`)
                 : response = await axios.get(`/api/taskbystate/${filterState}/${value}`);
             if (response.status === 200) {
                 if (!response.data.length) {
-                    toast.info('No se encontrarron resultados para tu busqueda.');
+                    toast.info('No se encontraron resultados para tu busqueda.');
                     setIsLoading(true);
                     setNotFound(true);
                     setRows(response.data);
@@ -186,7 +201,7 @@ const TaskTable = () => {
             setFilter(false);
             return
         }
-       
+
         let response;
         try {
             if (filterSearch !== "" && value !== "") { console.log('in'); response = await axios.get(`/api/taskbystate/${value}/${filterSearch}`); }
@@ -231,15 +246,37 @@ const TaskTable = () => {
 
     const getActionButtons = (id, likes) => {
         return actions.map((action, i) => {
-            return <Button
-                id={`like-button-${id}`}
-                key={i}
-                size="sm"
-                className="action-buttons"
-                onClick={getActionFunction(action, id, likes)}
-            >{getIcon(action)}</Button>
+            if (action === "like") {
+                if (validateDisables(id)) {
+                    return <Button
+                        id={(action === "like") ? `like-button-${id}` : `delete-button-${id}`}
+                        key={i}
+                        size="sm"
+                        className="action-buttons"
+                        isDisabled
+                        onClick={getActionFunction(action, id, likes)}
+                    >{getIcon(action)}</Button>
+                }
+                return <Button
+                    id={(action === "like") ? `like-button-${id}` : `delete-button-${id}`}
+                    key={i}
+                    size="sm"
+                    className="action-buttons"
+                    onClick={getActionFunction(action, id, likes)}
+                >{getIcon(action)}</Button>
+            } else {
+
+                return <Button
+                    id={(action === "like") ? `like-button-${id}` : `delete-button-${id}`}
+                    key={i}
+                    size="sm"
+                    className="action-buttons"
+                    onClick={getActionFunction(action, id, likes)}
+                >{getIcon(action)}</Button>
+            }
         });
     }
+
     return (
         <>
             <div className="m-5 p-5">
@@ -274,7 +311,7 @@ const TaskTable = () => {
                                 classNames={{
                                     label: "text-black/50 dark:text-white/90",
                                 }}
-                                placeholder="Type to search..."
+                                placeholder="Buscar por nombre..."
                                 startContent={
                                     <FaSearch />
                                 }
