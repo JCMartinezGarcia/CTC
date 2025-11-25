@@ -12,8 +12,7 @@ class TaskController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-
+    {   
         $tasks = DB::table('tasks')
             ->join('republic_states', 'tasks.state_id', '=', 'republic_states.state_id')
             ->select('tasks.*', 'republic_states.state_name')

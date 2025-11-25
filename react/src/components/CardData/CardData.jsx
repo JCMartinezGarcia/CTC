@@ -4,39 +4,33 @@ import { FaRegUser } from 'react-icons/fa';
 import { GrTask, GrLike } from "react-icons/gr";
 import "./CardData.css";
 
+const ICONS = {
+    users: <FaRegUser className="user-card-icon" />,
+    tasks: <GrTask className="user-card-icon" />,
+    likes: <GrLike className="user-card-icon" />,
+};
+
 const CardData = ({ icon, quantity }) => {
 
-    const setCardIcon = (iconText) => {
-        switch (iconText) {
-            case "users":
-                return <FaRegUser className="user-card-icon" />
-                break;
-            case "tasks":
-                return <GrTask className="user-card-icon" />
-                break;
-            case "likes":
-                return <GrLike className="user-card-icon" />
-                break;
-            default:
-                break;
-        }
-    }
+    const IconComponent = ICONS[icon];
+
+
     return (
-        <>
-            <div className="card-container">
-                <Card>
-                    <CardBody>
-                        <div className="inline-flex">
-                            {setCardIcon(icon)}
+        <div className="card-container">
+            <Card>
+                <CardBody>
+                    <div className="inline-flex">
+                        <div className="flex items-center gap-3">
+                            {IconComponent}
                             <div className="max-w-max p-1">
-                                <h1 className="text-2xl">4k</h1>
+                                <h1 className="text-2xl font-semibold">{quantity}k</h1>
                                 <small>Registro Mensual</small>
                             </div>
                         </div>
-                    </CardBody>
-                </Card>
-            </div>
-        </>
+                    </div>
+                </CardBody>
+            </Card>
+        </div>
     )
 }
 

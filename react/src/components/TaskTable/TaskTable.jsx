@@ -92,6 +92,7 @@ const TaskTable = ({ disables }) => {
             toast.error(`Ocurrio un error en el servidor`);
         }
     }
+    
     const getStates = async () => {
         try {
             const response = await axios.get("api/republicstates");
